@@ -2,12 +2,16 @@
   <div id='login'>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <el-row style="display:flex;justify-content:center;">
+          <!-- <el-row style="display:flex;justify-content:center;">
             <el-button type="primary" plain>登录</el-button>
             <el-button type="primary" plain>注册</el-button>
-          </el-row>
+          </el-row> -->
+            <ul style="display:flex;justify-content:center;">
+                <li class="currentHeaderBtn01" :class='currentIndex===index? "currentHeaderBtn":""' v-for='(item,index) in cancelBtn' :key='item.id' @click='handle(index)'>{{item.text}}</li>
+            </ul>
         </div>
-        <div>
+        <!-- 登录界面 -->
+        <div v-if='showPage'>
             <div class="box">
                 <div class="boxItem">邮箱：</div>
                 <el-input
@@ -40,6 +44,10 @@
                 <span>登录</span>
             </div>
         </div>
+        <!-- 注册界面 -->
+        <div v-else>
+            注册界面
+        </div>
       </el-card>
   </div>
 </template>
@@ -52,10 +60,20 @@ export default {
       emailValue:'',
       passWordValue:'',
       codeValue:'',
-
+      cancelBtn:[
+        {text:'登 录'},
+        {text:'注 册'}
+      ],
+      currentIndex:0,
+      showPage:true
     }
   },
-  methods: {}
+  methods: {
+    handle(index){
+      this.currentIndex=index,
+      this.showPage=!this.showPage
+    }
+  }
 }
 </script>
 
@@ -95,5 +113,18 @@ export default {
   }
   .boxItem{
     margin-bottom: 5px;
+  }
+  .currentHeaderBtn{
+    background-color: #00ace6!important;
+  }
+  .currentHeaderBtn01{
+    width: 74px;
+    height: 40px;
+    margin: 0 7px;
+    text-align: center;
+    line-height: 39px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #9494b8;
   }
 </style>
