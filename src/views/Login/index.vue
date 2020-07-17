@@ -37,7 +37,7 @@
                     clearable
                     style="margin-right:20px;">
                   </el-input>
-                  <el-button type="primary">主要按钮</el-button>
+                  <el-button type="primary">发送验证码</el-button>
                 </el-row>
             </div>
             <div class="loginSubmit">
@@ -46,7 +46,45 @@
         </div>
         <!-- 注册界面 -->
         <div v-else>
-            注册界面
+            <div class="box">
+                <div class="boxItem">邮箱：</div>
+                <el-input
+                  placeholder="请输入邮箱"
+                  v-model="emailValue"
+                  clearable>
+                </el-input>
+            </div>
+            <div class="box">
+                <div class="boxItem">密码：</div>
+                <el-input
+                  placeholder="请输入密码"
+                  v-model="passWordValue"
+                  clearable>
+                </el-input>
+            </div>
+            <div class="box">
+                <div class="boxItem">确认密码：</div>
+                <el-input
+                  placeholder="请输入密码"
+                  v-model="passWordValue"
+                  clearable>
+                </el-input>
+            </div>
+            <div class="box">
+                <div class="boxItem">验证码：</div>
+                <el-row style="display:flex;">
+                  <el-input
+                    placeholder="请输入验证码"
+                    v-model="codeValue"
+                    clearable
+                    style="margin-right:20px;">
+                  </el-input>
+                  <el-button type="primary">发送验证码</el-button>
+                </el-row>
+            </div>
+            <div class="loginSubmit">
+                <span>登录</span>
+            </div>
         </div>
       </el-card>
   </div>
@@ -98,6 +136,7 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 480px;
+    height: 460px;
   }
   .loginSubmit{
     background-color: #00ace6;
