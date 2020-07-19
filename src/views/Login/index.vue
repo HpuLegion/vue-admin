@@ -176,6 +176,7 @@
 </template>
 
 <script>
+import {stripscript } from '@/utils/validate'
 export default {
   name: '',
   data () {
@@ -193,6 +194,11 @@ export default {
       };
       // 密码
       var validatePass = (rule, value, callback) => {
+
+        // 过滤字符重新赋值
+        this.formLabelAlign.pass=stripscript(value)
+        value=this.formLabelAlign.pass
+
         let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/
 
         if (value === '') {
@@ -206,6 +212,11 @@ export default {
       };
       // 验证密码
       var validatePass2 = (rule, value, callback) => {
+
+                // 过滤字符重新赋值
+        this.formLabelAlign.pass=stripscript(value)
+        value=this.formLabelAlign.pass
+        
         if (value === '') {
           callback(new Error('请再次输入密码'));
         } else if (value !== this.formLabelAlign.pass) {
@@ -216,6 +227,11 @@ export default {
       };
       // 验证码
       var validateCode = (rule, value, callback) => {
+
+                // 过滤字符重新赋值
+        this.formLabelAlign.pass=stripscript(value)
+        value=this.formLabelAlign.pass
+        
         let reg = /^[a-z0-9]{6}$/
 
         if (value === '') {
@@ -305,7 +321,7 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 480px;
+    width: 420px;
     height: 490px;
   }
   .block{
