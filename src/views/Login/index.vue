@@ -46,6 +46,8 @@
         </div> -->
 
         <!-- 登录界面改进版 -->
+
+        <!-- 对于切换界面,v-show也可以，给cancelBtn的item添加type:'loginIn' | 'regiter' ，点击事件将type赋值给定义的model，而根元素上的v-show="model==='loginIn' | 'regiter' "来判断显示隐藏-->
         <div v-if='showPage' class="page">
             <el-form label-position="top" :model="formLabelAlign" :rules="rules" ref="ruleFormRef" >
 
@@ -176,16 +178,16 @@
 </template>
 
 <script>
-import {stripscript } from '@/utils/validate'
+import {stripscript,validateEmailFun } from '@/utils/validate'
 export default {
   name: '',
   data () {
     // 邮箱
       var validateEmail = (rule, value, callback) => {
-        var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+        // var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
         if (value=='') {
            callback(new Error('请输入邮箱'));
-        }else if(!reg.test(value)){
+        }else if(validateEmailFun(value)){
            callback(new Error('邮箱格式错误'));
         }else{
           callback()
@@ -214,7 +216,7 @@ export default {
       var validatePass2 = (rule, value, callback) => {
 
                 // 过滤字符重新赋值
-        this.formLabelAlign.pass=stripscript(value)
+        this.formLabelAlign.checkPass=stripscript(value)
         value=this.formLabelAlign.pass
         
         if (value === '') {
@@ -229,7 +231,7 @@ export default {
       var validateCode = (rule, value, callback) => {
 
                 // 过滤字符重新赋值
-        this.formLabelAlign.pass=stripscript(value)
+        this.formLabelAlign.codeValue=stripscript(value)
         value=this.formLabelAlign.pass
         
         let reg = /^[a-z0-9]{6}$/
