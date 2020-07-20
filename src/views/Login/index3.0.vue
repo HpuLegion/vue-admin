@@ -72,7 +72,7 @@
                         </el-input>
                     </el-col>
                     <el-col :span="10">
-                        <el-button type="primary" class="block" @click="getLoginSms">发送验证码</el-button>
+                        <el-button type="primary" class="block">发送验证码</el-button>
                     </el-col>
                   </el-row>
               </el-form-item>
@@ -180,7 +180,7 @@
 
 <script>
 import {stripscript,validateEmailFun } from '@/utils/validate'
-import {getSms, } from '@/api/Login.js'
+import { } from '@/api/Login.js'
 export default {
   name: '',
   data () {
@@ -300,14 +300,6 @@ export default {
     handle(index,currentShowBool){
       this.currentIndex=index,
       this.showPage=currentShowBool 
-    },
-    //登录验证码
-    getLoginSms(){
-      let data={
-        username:this.formLabelAlign.emailValue,
-        module: 'login'
-        }
-        getSms(data)
     },
     // 
     submitForm(ruleFormRef) {

@@ -59,6 +59,14 @@ module.exports = {
     hot: true, // 开启热加载
     hotOnly: false,
     proxy: null, // 设置代理
+        //跨域请求配置
+    proxy: {
+      '/devApi': {
+        target: 'http://www.web-jshtml.cn/productapi',
+        changeOrigin: true,//是否跨域 开启代理：在本地创建一个虚拟服务器
+        pathRewrite: {'^/devApi': ''} //重写路径
+      }
+    },
     overlay: { // 全屏模式下是否显示脚本错误
       warnings: true,
       errors: true
