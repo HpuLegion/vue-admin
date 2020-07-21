@@ -4,7 +4,7 @@ const BASEURL=process.env.NODE_ENV === 'production' ? '' : '/devApi';
 // 创建axios，并赋值给变量
 const instance=axios.create({
   baseURL: BASEURL, // http://192.168.1.3:8080/devApi/  === http://www.web-jshtml.cn/devApi/
-  timeout: 1000,
+  timeout: 15000,
   headers: {'X-Custom-Header': 'foobar'}
 })
 
@@ -22,12 +22,16 @@ instance.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     console.log('此请求响应数据----',response)
     let data= response.data
-    if(data.resCode!==''){
+    if(data.resCode!==0){
         Message.error(data.message);
         return Promise.reject(data); // ---- 跑请求调用的 .catch()
     }else{
-      return response
-      //return Promise.reolve() ---- 跑请求调用的 .then()
+      Message({
+        message: data.message,
+        type: 'success'
+      });
+      //return response   //---- 跑请求调用的 .then() { 可以在这里进行data处理---respons.data}
+      return Promise.resolve(data)  //---- 跑请求调用的 .then(){因为return的就是data，所以不用再处理data}
     }
   });
 

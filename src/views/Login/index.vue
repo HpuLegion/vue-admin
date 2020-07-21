@@ -7,43 +7,9 @@
             <el-button type="primary" plain>注册</el-button>
           </el-row> -->
             <ul style="display:flex;justify-content:center;">
-                <li class="currentHeaderBtn01 cursor_hand" :class='currentIndex===index? "currentHeaderBtn":""' v-for='(item,index) in cancelBtn' :key='item.id' @click='handle(index,item.currentShowBool)'>{{item.text}}</li>
+                <li class="currentHeaderBtn01 cursor_hand" :class='currentIndex===index? "currentHeaderBtn":""' v-for='(item,index) in cancelBtn' :key='item.id' @click='handle(index,item.currentShowBool,item.model)'>{{item.text}}</li>
             </ul>
         </div>
-        <!-- 登录界面 -->
-        <!-- <div v-if='showPage'>
-            <div class="box">
-                <div class="boxItem">邮箱：</div>
-                <el-input
-                  placeholder="请输入邮箱"
-                  v-model="emailValue"
-                  clearable>
-                </el-input>
-            </div>
-            <div class="box">
-                <div class="boxItem">密码：</div>
-                <el-input
-                  placeholder="请输入密码"
-                  v-model="pass"
-                  clearable>
-                </el-input>
-            </div>
-            <div class="box">
-                <div class="boxItem">验证码：</div>
-                <el-row style="display:flex;">
-                  <el-input
-                    placeholder="请输入验证码"
-                    v-model="codeValue"
-                    clearable
-                    style="margin-right:20px;">
-                  </el-input>
-                  <el-button type="primary">发送验证码</el-button>
-                </el-row>
-            </div>
-            <div class="loginSubmit">
-                <span>登录</span>
-            </div>
-        </div> -->
 
         <!-- 登录界面改进版 -->
 
@@ -122,7 +88,7 @@
             </div>
         </div> -->
 
-        
+
         <!-- 界面改进 -->
         <div class="page">
             <el-form label-position="top" :model="formLabelAlign" :rules="rules" ref="ruleFormRef" >
@@ -154,13 +120,13 @@
                         </el-input>
                     </el-col>
                     <el-col :span="10">
-                        <el-button type="primary" class="block" @click="getRegisterSms">发送验证码</el-button>
+                        <el-button type="primary" class="block" @click="getLoginSms" :disabled='codeBtn.status'>{{codeBtn.context}}</el-button>
                     </el-col>
                   </el-row>
               </el-form-item>
 
               <!-- 登录 -->
-              <el-button type="primary" class="block loginBtn">{{showPage?'注册':'登录'}}</el-button>           
+              <el-button type="primary" class="block loginBtn" :disabled="disableBtn" @click="submitForm('ruleFormRef',model)">{{model=='login'&&model!==''?'登录':'注册'}}</el-button>           
             </el-form>
         </div>
       </el-card>
@@ -169,7 +135,7 @@
 
 <script>
 import {stripscript,validateEmailFun } from '@/utils/validate'
-import {getSms, } from '@/api/Login.js'
+import {getSms,userRegister,userLogin } from '@/api/Login.js'
 export default {
   name: '',
   data () {
@@ -223,12 +189,11 @@ export default {
 
                 // 过滤字符重新赋值
         this.formLabelAlign.codeValue=stripscript(value)
-        value=this.formLabelAlign.pass
+        value=this.formLabelAlign.codeValue
         
-        let reg = /^[a-z0-9]{6}$/
-
+        let reg = /^[a-z0-9]{6}$/;
         if (value === '') {
-          callback(new Error('请验证码'));
+          callback(new Error('请输入验证码'));
         } else if (!reg.test(value)) {
           callback(new Error('验证码格式不正确'));
         } else {
@@ -271,11 +236,22 @@ export default {
        },
 
       cancelBtn:[
-        {text:'登 录',currentShowBool:false},
-        {text:'注 册',currentShowBool:true}
+        {text:'登 录',currentShowBool:false,model:'login'},
+        {text:'注 册',currentShowBool:true,model:'register'}
       ],
+    
       currentIndex:0,
+      //重新输入密码是否显示
       showPage:false,
+      //登录|注册模块标识
+      model:'login',
+      //按钮禁用状态
+      disableBtn:true,
+      //验证码
+      codeBtn:{
+        status:false,
+        context:'发送验证码'
+      }
 
     }
   },
@@ -286,15 +262,17 @@ export default {
     // },
 
     // 解决bug
-    handle(index,currentShowBool){
+    handle(index,currentShowBool,model){
       this.currentIndex=index
       this.showPage=currentShowBool
       this.$refs['ruleFormRef'].resetFields(); 
       // this.$refs.ruleFormRef.resetFields(); 
+      this.model=model
+      // console.log(model)
     },
 
     //登录验证码
-    getLoginSms(){
+    async getLoginSms(e){
       if(this.formLabelAlign.emailValue==''){
         this.$message.error('邮箱不能为空！');
         return false //阻断后面代码执行
@@ -305,54 +283,95 @@ export default {
       }
       let data={
         username:this.formLabelAlign.emailValue,
-        module: 'login'
-        }
+        module: this.model
+      }
+      // console.log(e.target.innerText)
+      // e.target.innerText='已发送'
+      this.codeBtn={
+        status:true,
+        context:'发送中'
+      }
+        this.disableBtn=false
         //对于没有注册的邮箱也能接收到验证码的bug，需要和后台沟通过滤
+    await setTimeout(()=>{
         getSms(data)
-        .then(response=>{
-          console.log(response)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-    },
+          .then(response=>{
+            console.log(response)
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+      },3000)
 
-    // 注册验证码
-    getRegisterSms(){
-      if(this.formLabelAlign.emailValue==''){
-        this.$message.error('邮箱不能为空！');
-        return false //阻断后面代码执行
-      }
-      if(validateEmailFun(this.formLabelAlign.emailValue)){
-        this.$message.error('邮箱格式错误！');
-        return false //阻断后面代码执行        
-      }
-      let data={
-        username:this.formLabelAlign.emailValue,
-        module: 'register'
-        }
-        //对于没有注册的邮箱也能接收到验证码的bug，需要和后台沟通过滤
-        getSms(data)
-        .then(response=>{
-          console.log(response)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
+      //调用倒计时函数
+      this.countDown(60)
+
     },
+    //倒计时cuntDown
+    countDown(number){
+        let time=setInterval(() => {
+            number--
+            // console.log(number)
+
+            // 60 和 0 都不会显示的bug会面会改
+            if(number==0){
+              clearInterval(time)
+              this.formLabelAlign.codeValue=''
+              this.codeBtn={
+                status:false,
+                context:'重新发送'
+              }
+            }else{
+
+              this.codeBtn.context=`倒计时${number}秒`
+            }
+        }, 1000);
+
     },
-    // 
-    submitForm(ruleFormRef) {
+     submitForm(ruleFormRef,model) {
+       console.log(model)
         this.$refs[ruleFormRef].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            if(model=='register'){
+                  let data={
+                    username:this.formLabelAlign.emailValue,
+                    password:this.formLabelAlign.pass,
+                    code:this.formLabelAlign.codeValue
+                  }
+                  userRegister(data)
+                    .then(response=>{
+                      console.log(response)
+                    })
+                    .catch(err=>{
+                      console.log(err)
+                    })
+            }else if(model=='login'){
+                  let data={
+                    username:this.formLabelAlign.emailValue,
+                    password:this.formLabelAlign.pass,
+                    code:this.formLabelAlign.codeValue
+                  }
+                  userLogin(data)
+                    .then(response=>{
+                      console.log(response)
+                    })
+                    .catch(err=>{
+                      console.log(err)
+                    })
+            }
+
+              
           } else {
             console.log('error submit!!');
             return false;
           }
         });
-    },
-  }
+    }
+
+  },
+    // 
+   
+}
 
 </script>
 
