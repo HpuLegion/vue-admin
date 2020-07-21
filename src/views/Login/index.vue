@@ -308,6 +308,12 @@ export default {
         module: 'login'
         }
         getSms(data)
+        .then(response=>{
+          console.log(response)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     },
     // 
     submitForm(ruleFormRef) {
