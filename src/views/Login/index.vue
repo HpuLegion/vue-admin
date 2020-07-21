@@ -49,8 +49,8 @@
 
         <!-- 对于切换界面,v-show也可以，给cancelBtn的item添加type:'loginIn' | 'regiter' ，点击事件将type赋值给定义的model，而根元素上的v-show="model==='loginIn' | 'regiter' "来判断显示隐藏-->
         
-        <div v-if='showPage' class="page">
-            <el-form label-position="top" :model="formLabelAlign" :rules="rules" ref="ruleFormRef" >
+        <!-- <div v-if='showPage' class="page">
+            <el-form label-position="top" :model="formLabelAlign" :rules="rules" ref="loginFormRef" >
 
               <el-form-item  prop='emailValue' >
                 <label >邮箱：</label>
@@ -76,11 +76,9 @@
                     </el-col>
                   </el-row>
               </el-form-item>
-
-              <!-- 登录 -->
               <el-button type="primary" class="block loginBtn" @click="submitForm('ruleFormRef')">登录</el-button>           
             </el-form>
-        </div>
+        </div> -->
         <!-- 注册界面 -->
         <!-- <div v-else>
             <div class="box">
@@ -123,8 +121,10 @@
                 <span>登录</span>
             </div>
         </div> -->
-        <!-- 注册界面改进 -->
-        <div v-else class="page">
+
+        
+        <!-- 界面改进 -->
+        <div class="page">
             <el-form label-position="top" :model="formLabelAlign" :rules="rules" ref="ruleFormRef" >
 
               <el-form-item  prop='emailValue' >
@@ -137,23 +137,12 @@
                 <el-input type="password" v-model="formLabelAlign.pass" show-password autocomplete="off"></el-input>
               </el-form-item>
 
-              <el-form-item  prop='checkPass' >
+              <el-form-item  prop='checkPass' v-if='showPage'>
                 <label >确认密码：</label>
                 <el-input  type="password" v-model="formLabelAlign.checkPass" show-password autocomplete="off"></el-input>
               </el-form-item>
 
               <!-- 验证码 -->
-              <!-- <el-form-item label="验证码：" prop='codeValue'>
-                <el-row style="display:flex;">
-                  <el-input
-                    v-model="formLabelAlign.codeValue"
-                    clearable
-                    style="margin-right:20px;">
-                  </el-input>
-                  <el-button type="primary">发送验证码</el-button>
-                </el-row>
-              </el-form-item> -->
-              <!-- 验证码layout布局 -->
 
               <el-form-item  prop='codeValue'>
                   <label >验证码：</label>
@@ -165,13 +154,13 @@
                         </el-input>
                     </el-col>
                     <el-col :span="10">
-                        <el-button type="primary" class="block">发送验证码</el-button>
+                        <el-button type="primary" class="block" @click="getRegisterSms">发送验证码</el-button>
                     </el-col>
                   </el-row>
               </el-form-item>
 
               <!-- 登录 -->
-              <el-button type="primary" class="block loginBtn">注册</el-button>           
+              <el-button type="primary" class="block loginBtn">{{showPage?'注册':'登录'}}</el-button>           
             </el-form>
         </div>
       </el-card>
@@ -282,11 +271,11 @@ export default {
        },
 
       cancelBtn:[
-        {text:'登 录',currentShowBool:true},
-        {text:'注 册',currentShowBool:false}
+        {text:'登 录',currentShowBool:false},
+        {text:'注 册',currentShowBool:true}
       ],
       currentIndex:0,
-      showPage:true,
+      showPage:false,
 
     }
   },
@@ -298,15 +287,27 @@ export default {
 
     // 解决bug
     handle(index,currentShowBool){
-      this.currentIndex=index,
-      this.showPage=currentShowBool 
+      this.currentIndex=index
+      this.showPage=currentShowBool
+      this.$refs['ruleFormRef'].resetFields(); 
+      // this.$refs.ruleFormRef.resetFields(); 
     },
+
     //登录验证码
     getLoginSms(){
+      if(this.formLabelAlign.emailValue==''){
+        this.$message.error('邮箱不能为空！');
+        return false //阻断后面代码执行
+      }
+      if(validateEmailFun(this.formLabelAlign.emailValue)){
+        this.$message.error('邮箱格式错误！');
+        return false //阻断后面代码执行        
+      }
       let data={
         username:this.formLabelAlign.emailValue,
         module: 'login'
         }
+        //对于没有注册的邮箱也能接收到验证码的bug，需要和后台沟通过滤
         getSms(data)
         .then(response=>{
           console.log(response)
@@ -314,6 +315,31 @@ export default {
         .catch(err=>{
           console.log(err)
         })
+    },
+
+    // 注册验证码
+    getRegisterSms(){
+      if(this.formLabelAlign.emailValue==''){
+        this.$message.error('邮箱不能为空！');
+        return false //阻断后面代码执行
+      }
+      if(validateEmailFun(this.formLabelAlign.emailValue)){
+        this.$message.error('邮箱格式错误！');
+        return false //阻断后面代码执行        
+      }
+      let data={
+        username:this.formLabelAlign.emailValue,
+        module: 'register'
+        }
+        //对于没有注册的邮箱也能接收到验证码的bug，需要和后台沟通过滤
+        getSms(data)
+        .then(response=>{
+          console.log(response)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
     },
     // 
     submitForm(ruleFormRef) {
@@ -327,7 +353,7 @@ export default {
         });
     },
   }
-}
+
 </script>
 
 <style scoped lang='scss'>
