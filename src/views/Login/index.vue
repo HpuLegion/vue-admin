@@ -134,6 +134,7 @@
 </template>
 
 <script>
+// import sha1 from 'js-sha1'  引入sha1对密码进行加密
 import {stripscript,validateEmailFun } from '@/utils/validate'
 import {getSms,userRegister,userLogin } from '@/api/Login.js'
 export default {
@@ -251,7 +252,9 @@ export default {
       codeBtn:{
         status:false,
         context:'发送验证码'
-      }
+      },
+      //定时器
+      timer:null,
 
     }
   },
@@ -269,6 +272,9 @@ export default {
       // this.$refs.ruleFormRef.resetFields(); 
       this.model=model
       // console.log(model)
+
+      //切换tab，清除验证码倒计时
+      this.clearCode()
     },
 
     //登录验证码
@@ -287,10 +293,12 @@ export default {
       }
       // console.log(e.target.innerText)
       // e.target.innerText='已发送'
-      this.codeBtn={
-        status:true,
-        context:'发送中'
-      }
+      this.codeBtn.status=true
+      this.codeBtn.context='发送中'
+      // this.codeBtn={
+      //   status:true,
+      //   context:'发送中'
+      // }
         this.disableBtn=false
         //对于没有注册的邮箱也能接收到验证码的bug，需要和后台沟通过滤
     await setTimeout(()=>{
@@ -309,18 +317,25 @@ export default {
     },
     //倒计时cuntDown
     countDown(number){
-        let time=setInterval(() => {
+        //先判断定时器是否存在，存在则清除
+        //不过因为我们设置了disabled，定时器运转期间按钮不可操作，这里清理定时器就显得没必要了
+        if(this.timer){
+          clearInterval( this.timer)
+        }
+         this.timer=setInterval(() => {
             number--
             // console.log(number)
 
             // 60 和 0 都不会显示的bug会面会改
             if(number==0){
-              clearInterval(time)
+              clearInterval( this.timer)
               this.formLabelAlign.codeValue=''
-              this.codeBtn={
-                status:false,
-                context:'重新发送'
-              }
+              this.codeBtn.status=false
+              this.codeBtn.context='重新发送'
+              // this.codeBtn={
+              //   status:false,
+              //   context:'重新发送'
+              // }
             }else{
 
               this.codeBtn.context=`倒计时${number}秒`
@@ -332,27 +347,37 @@ export default {
        console.log(model)
         this.$refs[ruleFormRef].validate((valid) => {
           if (valid) {
+
+            // 注册
             if(model=='register'){
                   let data={
                     username:this.formLabelAlign.emailValue,
                     password:this.formLabelAlign.pass,
+                    //sha1加密
+                    // password:sha1(this.formLabelAlign.pass)
                     code:this.formLabelAlign.codeValue
                   }
                   userRegister(data)
                     .then(response=>{
+                      this.clearCode()
                       console.log(response)
                     })
                     .catch(err=>{
                       console.log(err)
                     })
-            }else if(model=='login'){
+            }
+            // 登录
+            else if(model=='login'){
                   let data={
                     username:this.formLabelAlign.emailValue,
                     password:this.formLabelAlign.pass,
+                    //sha1加密
+                    // password:sha1(this.formLabelAlign.pass)
                     code:this.formLabelAlign.codeValue
                   }
                   userLogin(data)
                     .then(response=>{
+                      this.clearCode()
                       console.log(response)
                     })
                     .catch(err=>{
@@ -366,7 +391,15 @@ export default {
             return false;
           }
         });
+    },
+    //清除定时器验证码
+    clearCode(){
+        clearInterval( this.timer)
+        this.formLabelAlign.codeValue=''
+        this.codeBtn.status=false
+        this.codeBtn.context='发送验证码'
     }
+
 
   },
     // 
