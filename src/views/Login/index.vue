@@ -379,6 +379,7 @@ export default {
                     .then(response=>{
                       this.clearCode()
                       console.log(response)
+                      this.$router.push({path:'/console'})
                     })
                     .catch(err=>{
                       console.log(err)

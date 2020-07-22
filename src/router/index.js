@@ -13,6 +13,12 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'Login',
     component: ()=>import('@/views/Login')
+  },
+  // 后台控制主页面
+  {
+    path: '/console',
+    name: 'Console',
+    component: ()=>import('@/views/Layout')
   }
 ]
 
