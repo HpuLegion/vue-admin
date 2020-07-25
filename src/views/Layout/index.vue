@@ -25,6 +25,8 @@ export default {
 }
 </script>
 
-<style scoped lang='less'>
-
+<style scoped lang='scss'>
+    #layout{
+        background-color: #f5f5f5;
+    }
 </style>

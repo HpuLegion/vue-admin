@@ -1,14 +1,12 @@
 <template>
   <div>
-      <!-- <Layout /> -->
+      信息详情
   </div>
 </template>
 
 <script>
-// import Layout from '../Layout/index'
 export default {
-  name: 'Console',
-//   components:{Layout},
+  name: '',
   data () {
     return {
     }
@@ -17,6 +15,6 @@ export default {
 }
 </script>
 
-<style scoped lang='sass'>
+<style scoped lang='less'>
 
 </style>

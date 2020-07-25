@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="Header">
       Header 
   </div>
 </template>
@@ -15,6 +15,15 @@ export default {
 }
 </script>
 
-<style scoped lang='less'>
-
+<style scoped lang='scss'>
+@import '../../../styles/config.scss';
+    #Header{
+        position: fixed;
+        top: 0;
+        left: $navWidth;
+        height: 75px;
+        width: 100vw;
+        -webkit-box-shadow: 0 3px 16px  rgba(0,0,0,.1);
+        background-color: #fff;
+    }
 </style>
