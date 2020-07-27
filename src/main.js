@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
+import '@/icon/index.js'
 
 //引入完整的elementUI
 import ElementUI from 'element-ui';

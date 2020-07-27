@@ -1,6 +1,10 @@
 <template>
   <div id="Header">
-      Header 
+    <div>
+      <!-- <svg-icon  iconClass="menu" className="menu"/>  -->
+      header
+    </div>
+       
   </div>
 </template>
 
@@ -9,6 +13,7 @@ export default {
   name: '',
   data () {
     return {
+
     }
   },
   methods: {}
@@ -18,12 +23,10 @@ export default {
 <style scoped lang='scss'>
 @import '../../../styles/config.scss';
     #Header{
-        position: fixed;
-        top: 0;
-        left: $navWidth;
         height: 75px;
-        width: 100vw;
-        -webkit-box-shadow: 0 3px 16px  rgba(0,0,0,.1);
+        padding:20px 30px 0 30px;
+        box-sizing:border-box;
+        box-shadow: 0 4px 16px  #666 ;
         background-color: #fff;
     }
 </style>

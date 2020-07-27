@@ -13,3 +13,14 @@
             background-color: #f56c6c !important;
         }
      }
+     .el-col{
+        &.el-col-2{
+            margin-top:10px;
+        }
+     }
+   
+     .el-col{
+        &.el-col-10{
+            margin-top:-2px;
+        }
+     }

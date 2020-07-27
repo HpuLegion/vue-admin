@@ -7,24 +7,23 @@
 <script>
 export default {
   name: '',
+
   data () {
     return {
     }
   },
-  methods: {}
+  methods: {},
+
 }
 </script>
 
 <style scoped lang='scss'>
 @import '../../../styles/config.scss';
     #Main{
-        position: fixed;
-        top: 75px;
-        left: $navWidth;
-        height: 100vh;
-        width: 100vw;
-        margin-top: 30px;
-        margin-left: 30px;
+        height:calc(100vh - 75px);
+        padding:30px 30px 0 30px; 
+        box-sizing:border-box ;
         background-color: #fff;
+        border:30px solid #eee;
     }
 </style>

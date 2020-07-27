@@ -1,8 +1,11 @@
 <template>
   <div id="layout">
-      <Header />
       <Nav />
-      <Main />
+      <div class="rightContent">
+          <Header />
+          <Main />
+      </div>
+  
   </div>
 </template>
 
@@ -27,6 +30,12 @@ export default {
 
 <style scoped lang='scss'>
     #layout{
+      display: flex;
         background-color: #f5f5f5;
+    }
+    .rightContent{
+      width: calc(100vw - 250px);
+      height: 100vh;
+      
     }
 </style>

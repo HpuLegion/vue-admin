@@ -8,6 +8,8 @@ const originalPush = VueRouter.prototype.push
    return originalPush.call(this, location).catch(err => err)
 }
 
+//优化 ----- component: ()=>import('@/views/Layout')  引用出现多次
+import Layout from '@/views/Layout/index.vue'
 
 Vue.use(VueRouter)
 
@@ -37,7 +39,8 @@ Vue.use(VueRouter)
     meta:{
       name:'后台首页'
     },
-    component: ()=>import('@/views/Layout'),
+    // component: ()=>import('@/views/Layout'),
+    component: Layout,
     children:[
       {
         path: '/index',
@@ -45,7 +48,8 @@ Vue.use(VueRouter)
         meta:{
           name:'首页'
         },
-        component: ()=>import('@/views/Layout/index.vue')
+        // component: ()=>import('@/views/Layout/index.vue')
+        component: Layout
       }
     ]
   },
@@ -55,7 +59,8 @@ Vue.use(VueRouter)
     meta:{
       name:'信息管理'
     },
-    component: ()=>import('@/views/Layout'),
+    // component: ()=>import('@/views/Layout'),
+    component: Layout,
     children:[
       {
         path: '/infoList',
@@ -89,7 +94,8 @@ Vue.use(VueRouter)
     meta:{
       name:'用户管理'
     },
-    component: ()=>import('@/views/Layout'),
+    // component: ()=>import('@/views/Layout'),
+    component: Layout,
     children:[
       {
         path: '/userList',
