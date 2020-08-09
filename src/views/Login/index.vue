@@ -204,8 +204,8 @@ export default {
 
     return {
       formLabelAlign:{
-        emailValue:'',
-        pass:'',
+        emailValue:'1163572188@qq.com',
+        pass:'wlq09876',
         checkPass:'',
         codeValue:'',
       },
@@ -379,7 +379,7 @@ export default {
                     .then(response=>{
                       this.clearCode()
                       console.log(response)
-                      this.$router.push({path:'/layout'})
+                      this.$router.push({path:'/console'})
                     })
                     .catch(err=>{
                       console.log(err)

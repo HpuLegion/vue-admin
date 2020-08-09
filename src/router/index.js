@@ -33,14 +33,17 @@ Vue.use(VueRouter)
     component: ()=>import('@/views/Login')
   },
   // 后台控制主页面
+
   {
-    path: '/layout',
-    name: 'Layout',
+    path: '/console',
+    name: 'Console',
+    redirect: "index",
     meta:{
-      name:'后台首页'
+      name:'控制台'
     },
-    // component: ()=>import('@/views/Layout'),
+    hidden:false,
     component: Layout,
+    // component: Layout,
     children:[
       {
         path: '/index',
@@ -48,65 +51,92 @@ Vue.use(VueRouter)
         meta:{
           name:'首页'
         },
-        // component: ()=>import('@/views/Layout/index.vue')
-        component: Layout
+        component: ()=>import('@/views/Console/index.vue')
       }
     ]
   },
   {
-    path: '/info',
-    name: 'Info',
+    path: '/paking',
+    name: 'Paking',
     meta:{
-      name:'信息管理'
+      name:'停车场'
     },
-    // component: ()=>import('@/views/Layout'),
+    hidden:false,
     component: Layout,
     children:[
       {
-        path: '/infoList',
-        name: 'InfoList',
+        path: '/listManager',
+        name: 'ListManager',
         meta:{
-          name:'信息列表'
+          name:'列表管理'
         },
-        component: ()=>import('@/views/Info/infoList.vue')
+        component: ()=>import('@/views/ListManager')
       },
       {
-        path: '/infoCate',
-        name: 'InfoCate',
+        path: '/addPaking',
+        name: 'AddPaking',
         meta:{
-          name:'信息分类'
+          name:'新增停车场'
         },
-        component: ()=>import('@/views/Info/infoCate.vue')
+        component: ()=>import('@/views/AddPaking')
       },
-      {
-        path: '/infoDetails',
-        name: 'InfoDetails',
-        meta:{
-          name:'信息详情'
-        },
-        component: ()=>import('@/views/Info/infoDetails.vue')
-      }
     ]
   },
-  {
-    path: '/userManage',
-    name: 'UserManage',
-    meta:{
-      name:'用户管理'
-    },
-    // component: ()=>import('@/views/Layout'),
-    component: Layout,
-    children:[
-      {
-        path: '/userList',
-        name: 'UserList',
-        meta:{
-          name:'用户列表'
-        },
-        component: ()=>import('@/views/UserManage/userList.vue')
-      }
-    ]
-  },
+
+  // {
+  //   path: '/info',
+  //   name: 'Info',
+  //   meta:{
+  //     name:'信息管理'
+  //   },
+  //   // component: ()=>import('@/views/Layout'),
+  //   component: Layout,
+  //   children:[
+  //     {
+  //       path: '/infoList',
+  //       name: 'InfoList',
+  //       meta:{
+  //         name:'信息列表'
+  //       },
+  //       component: ()=>import('@/views/Info/infoList.vue')
+  //     },
+  //     {
+  //       path: '/infoCate',
+  //       name: 'InfoCate',
+  //       meta:{
+  //         name:'信息分类'
+  //       },
+  //       component: ()=>import('@/views/Info/infoCate.vue')
+  //     },
+  //     {
+  //       path: '/infoDetails',
+  //       name: 'InfoDetails',
+  //       meta:{
+  //         name:'信息详情'
+  //       },
+  //       component: ()=>import('@/views/Info/infoDetails.vue')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/userManage',
+  //   name: 'UserManage',
+  //   meta:{
+  //     name:'用户管理'
+  //   },
+  //   // component: ()=>import('@/views/Layout'),
+  //   component: Layout,
+  //   children:[
+  //     {
+  //       path: '/userList',
+  //       name: 'UserList',
+  //       meta:{
+  //         name:'用户列表'
+  //       },
+  //       component: ()=>import('@/views/UserManage/userList.vue')
+  //     }
+  //   ]
+  // },
 ]
 
 const router = new VueRouter({
